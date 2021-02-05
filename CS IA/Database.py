@@ -1,98 +1,59 @@
-from tkinter import*
-import sqlite3
+ from tkinter import*
 
-root = tk.Tk()
-root.title("Database")
-root.geometry("750x500")
+def register_user():
 
-conn = sqlite3.connect('TeachersDatabase.db')
+  username_info = username.get()
+  password_info = password.get()
 
-conn.cusror()
+  file=open(username_info+".txt", "w")
+  file.write(username_info+"\n")
+  file.write(password_info)
+  file.close()
 
-c.execute(""CREATE TABLE addresses (
-   first_name text,
-   last_name text,
-   year text,
-   results text,
-   improvements text,
-   goals text,
-""))
-def submit():
- conn = sqlite3.connect('TeachersDatabase.db')
+  username_entry.delete(0, END)
+  password_entry.delete(0, END)
 
- c = conn.cursor()
+  Label(screen1, text = "Registration Sucess", fg = "green" ,font = ("calibri", 11)).pack()
 
- c.execute("INSERT INTO addresses VALUES (:f_name, :l_name, :year, :results, :improvements, :goals)",)
-          {
-              'f_name': f_name.get(),
-              'l_name': l_name.get(),
-              'year': year.get(),
-              'results': results.get(),
-              'improvements': improvements.get(),
-              'goals': goals.get(),
-          }
-          f_name.delete(0, END)
-          l_name.delete(0, END)
-          year.delete(0, END)
-          results.delete(0, END)
-          improvements.delete(0, END)
-          goals.delete(0, END)
+def register():
+  global screen1
+  screen1 = Toplevel(screen)
+  screen1.title("Register")
+  screen1.geometry("300x250")
+  
+  global username
+  global password
+  global username_entry
+  global password_entry
+  username = StringVar()
+  password = StringVar()
 
-def query():
-    return
+  Label(screen1, text = "Please enter details below").pack()
+  Label(screen1, text = "").pack()
+  Label(screen1, text = "Username * ").pack()
+  username_entry = Entry(screen1, textvariable = username)
+  username_entry.pack()
+  Label(screen1, text = "Password * ").pack()
+  password_entry =  Entry(screen1, textvariable = password)
+  password_entry.pack()
+  Label(screen1, text = "").pack()
+  Button(screen1, text = "Register", width = 10, height = 1, command = register_user).pack()
 
-    conn = sqlite3.connect('TeachersDatabase.db')
+def login():
+  print("Login session started")
 
-    c = conn.cursor()
 
-    c.execute("SELECT *, oid FROM adresses")
-    records = c.fetchall()
-    print(records)
+def main_screen():
+  global screen
+  screen = Tk()
+  screen.geometry("300x250")
+  screen.title("Login or register")
+  Label(text = "Login or register", bg = "grey", width = "300", height = "2", font = ("Calibri", 13)).pack()
+  Label(text = "").pack()
+  Button(text = "Login", height = "2", width = "30", command = login).pack()
+  Label(text = "").pack()
+  Button(text = "Register",height = "2", width = "30", command = register).pack()
 
-    for record in records[0]:
-        print_records += str(record[0]) + "\n"
+  screen.mainloop()
 
-    query_label = Label(root, text=print_records)
-    query_label.grid(row=8, column=0, columnspan=2)
-
-    conn.commit()
-
-    conn.close()
-
-f_name = Entry(root, width=30)
-f_name.grid(row=0, column=1,padx20)
-l_name = Entry(root, width=30)
-l_name.grid(row=1, column=1,padx20)
-year = Entry(root, width=30)
-year.grid(row=2, column=1,padx20)
-results = Entry(root, width=30)
-results.grid(row=3, column=1,padx20)
-improvements = Entry(root, width=30)
-improvements.grid(row=4, column=1,padx20)
-goals = Entry(root, width=30)
-goals.grid(row=5, column=1,padx20)
-
-f_name_label = Label(root, text="First Name")
-f_name_label.grid(row=0, column=0)
-l_name_label = Label(root, text="Last Name")
-l_name_label.grid(row=1, column=0)
-year_label = Label(root, text="Year")
-year_label.grid(row=2, column=0)
-results_label = Label(root, text="Results")
-results_label.grid(row=3, column=0)
-improvements_label = Label(root, text="Improvements")
-improvements_label.grid(row=4, column=0)
-goals_label = Label(root, text="Goals")
-goals_label.grid(row=5, column=0)
-
-submit_btn = Button(root, text="Add Record To Database", command=submit)
-submit_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
-
-query_btn = Button(root, text="Show Records", command=query)
-query_btn.grid(row=7, cloumn=0, columnspand=2, pady=10, padx=10, ipadx=137)
-
-conn.commit()
-
-conn.close()
-
-root.mainloop()
+main_screen()
